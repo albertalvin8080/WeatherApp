@@ -1,8 +1,5 @@
 package org.albert.weatherapp
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -28,33 +25,34 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.albert.weatherapp.ui.theme.WeatherAppTheme
 
-class LoginActivity : ComponentActivity() {
+class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginPage(modifier = Modifier.padding(innerPadding))
+                    RegisterActivity(
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun RegisterActivity(modifier: Modifier = Modifier) {
+    var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-//    val activity = LocalContext.current as? Activity
+    var repeatPassword by rememberSaveable { mutableStateOf("") }
+
     val activity = LocalActivity.current
     Column(
         verticalArrangement = Arrangement.Center,
@@ -64,8 +62,15 @@ fun LoginPage(modifier: Modifier = Modifier) {
             .fillMaxSize()
     ) {
         Text(
-            text = "Bem-vindo/a!",
+            text = "Registre-se",
             fontSize = 24.sp
+        )
+        Spacer(modifier = Modifier.size(24.dp))
+        OutlinedTextField(
+            value = name,
+            label = { Text(text = "Digite seu nome") },
+            modifier = Modifier.fillMaxWidth(0.9f),
+            onValueChange = { name = it }
         )
         Spacer(modifier = Modifier.size(24.dp))
         OutlinedTextField(
@@ -83,40 +88,34 @@ fun LoginPage(modifier: Modifier = Modifier) {
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.size(24.dp))
+        OutlinedTextField(
+            value = repeatPassword,
+            label = { Text(text = "Repita a senha") },
+            modifier = Modifier.fillMaxWidth(0.9f),
+            onValueChange = { repeatPassword = it },
+            visualTransformation = PasswordVisualTransformation()
+        )
+        Spacer(modifier = Modifier.size(24.dp))
         Row(
             modifier = Modifier,
+//            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.Center
         ) {
             Button(
                 onClick = {
-                    Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
-                    activity?.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
+                    Toast.makeText(activity, "Registro OK!", Toast.LENGTH_LONG).show()
+                    activity?.finish()
                 },
-                enabled = email.isNotEmpty() && password.isNotEmpty()
+                enabled = email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty() && repeatPassword == password
             ) {
-                Text("Login")
+                Text("Register")
             }
             Spacer(modifier = Modifier.size(24.dp))
             Button(
-                onClick = { email = ""; password = "" }
+                onClick = { email = ""; password = ""; name = ""; repeatPassword = "" }
             ) {
                 Text("Limpar")
             }
-        }
-        Spacer(modifier = Modifier.size(24.dp))
-        Button(
-            onClick = {
-                activity?.startActivity(
-                    Intent(activity, RegisterActivity::class.java).setFlags(
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    )
-                )
-            }
-        ) {
-            Text("Register")
         }
     }
 }

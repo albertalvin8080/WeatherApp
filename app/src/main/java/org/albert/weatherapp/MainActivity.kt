@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun HomePage(modifier: Modifier) {
+fun HomePage(modifier: Modifier = Modifier) {
     val activity = LocalActivity.current
     Column(
         verticalArrangement = Arrangement.Center,
@@ -53,6 +53,7 @@ fun HomePage(modifier: Modifier) {
             text = "Bem-vindo/a!",
             fontSize = 24.sp
         )
+        Spacer(modifier = Modifier.size(24.dp))
         Button(
             onClick = {
                 activity?.finish()
