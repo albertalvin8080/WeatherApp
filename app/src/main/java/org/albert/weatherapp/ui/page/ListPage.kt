@@ -28,11 +28,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.albert.weatherapp.model.City
+import org.albert.weatherapp.viewmodel.MainViewModel
 
 @SuppressLint("ContextCastToActivity")
 @Composable
-fun ListPage(modifier: Modifier = Modifier) {
-    val cityList = remember { getCities().toMutableStateList() }
+fun ListPage( viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    val cityList = viewModel.cities
     val activity = LocalContext.current as? Activity
     LazyColumn (
         modifier = modifier
@@ -41,16 +42,13 @@ fun ListPage(modifier: Modifier = Modifier) {
     ) {
         items(cityList, key = { it.name }) { city ->
             CityItem(city = city, onClose = {
+                viewModel.remove(city)
                 Toast.makeText(activity, "remove city ${city.name}", Toast.LENGTH_SHORT).show()
             }, onClick = {
                 Toast.makeText(activity, "city ${city.name}", Toast.LENGTH_SHORT).show()
             })
         }
     }
-}
-
-private fun getCities() = List(20) { i ->
-    City(name = "Cidade $i", weather = "Carregando clima...")
 }
 
 @Composable

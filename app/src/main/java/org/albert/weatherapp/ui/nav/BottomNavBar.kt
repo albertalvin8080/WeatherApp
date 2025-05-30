@@ -15,12 +15,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import org.albert.weatherapp.ui.page.HomePage
 import org.albert.weatherapp.ui.page.ListPage
 import org.albert.weatherapp.ui.page.MapPage
+import org.albert.weatherapp.viewmodel.MainViewModel
 
 @Composable
-fun MainNavHost(navController: NavHostController) {
+fun MainNavHost(navController: NavHostController, mainViewModel: MainViewModel) {
     NavHost(navController, startDestination = Route.Home) {
         composable<Route.Home> { HomePage() }
-        composable<Route.List> { ListPage() }
+        composable<Route.List> { ListPage(mainViewModel) }
         composable<Route.Map> { MapPage() }
     }
 }
