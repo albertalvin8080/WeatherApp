@@ -143,3 +143,4 @@ Ground-Truth-Evaluation/weights_v2/*.zip
 Ground-Truth-Evaluation/weights_v2/onnx/
 
 #**/*.onnx
+**/local.properties
