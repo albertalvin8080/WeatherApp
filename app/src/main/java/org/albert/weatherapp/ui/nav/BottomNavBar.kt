@@ -22,7 +22,7 @@ fun MainNavHost(navController: NavHostController, mainViewModel: MainViewModel) 
     NavHost(navController, startDestination = Route.Home) {
         composable<Route.Home> { HomePage() }
         composable<Route.List> { ListPage(mainViewModel) }
-        composable<Route.Map> { MapPage() }
+        composable<Route.Map> { MapPage(mainViewModel) }
     }
 }
 

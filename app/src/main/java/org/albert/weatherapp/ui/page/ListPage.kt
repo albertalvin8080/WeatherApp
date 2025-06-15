@@ -30,7 +30,7 @@ import org.albert.weatherapp.viewmodel.MainViewModel
 
 @SuppressLint("ContextCastToActivity")
 @Composable
-fun ListPage( viewModel: MainViewModel, modifier: Modifier = Modifier) {
+fun ListPage(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val cityList = viewModel.cities
     val activity = LocalContext.current as? Activity
     LazyColumn (
