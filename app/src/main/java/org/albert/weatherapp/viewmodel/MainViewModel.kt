@@ -2,6 +2,7 @@ package org.albert.weatherapp.viewmodel
 
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.maps.model.LatLng
 import org.albert.weatherapp.model.City
 
 private fun getCities() = List(20) { i ->
@@ -15,7 +16,7 @@ class MainViewModel : ViewModel() {
     fun remove(city: City) {
         _cities.remove(city)
     }
-    fun add(name: String) {
-        _cities.add(City(name = name))
+    fun add(name: String, location: LatLng? = null) {
+        _cities.add(City(name = name, location = location))
     }
 }
