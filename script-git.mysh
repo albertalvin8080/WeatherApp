@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# curl -sSL https://raw.githubusercontent.com/albertalvin8080/albertalvin8080/main/.gitignore -o .gitignore
+curl -L https://raw.githubusercontent.com/albertalvin8080/albertalvin8080/main/.gitignore -o .gitignore; echo
 # git pull
 
 list=("feat" "wip" "fix" "build" "chore" "style" "refactor" "perf" "revert" "test" "docs")
@@ -16,7 +18,7 @@ for i in "${!list[@]}"; do
 done
 
 # Flush stdin buffer
-read -t 1 -n 10000
+read -t 1 -n 100
 
 read -p ":" conv_op
 choice=${list[$conv_op]}
