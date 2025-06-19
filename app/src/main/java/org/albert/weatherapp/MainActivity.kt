@@ -1,5 +1,6 @@
 package org.albert.weatherapp
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import org.albert.weatherapp.ui.dialog.CityDialog
 import org.albert.weatherapp.ui.nav.BottomNavBar
 import org.albert.weatherapp.ui.nav.BottomNavItem
@@ -35,7 +38,6 @@ import org.albert.weatherapp.ui.nav.MainNavHost
 import org.albert.weatherapp.ui.nav.Route
 import org.albert.weatherapp.ui.theme.WeatherAppTheme
 import org.albert.weatherapp.viewmodel.MainViewModel
-import android.Manifest
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("RestrictedApi")
@@ -65,7 +67,10 @@ class MainActivity : ComponentActivity() {
                         TopAppBar(
                             title = { Text("Bem-vindo/a!") },
                             actions = {
-                                IconButton(onClick = { finish() }) {
+                                IconButton(onClick = {
+                                    Firebase.auth.signOut()
+                                    // finish() // removed on 5th practice
+                                }) {
                                     Icon(
                                         imageVector =
                                         Icons.AutoMirrored.Filled.ExitToApp,

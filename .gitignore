@@ -1,7 +1,4 @@
-**/.angular/
-**/.DS_Store
 **/.gradle
-
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -70,7 +67,6 @@ JPA_Hibernate/first-test/mysql-data/
 # C/*.exe
 **/*.exe
 **/*.pdb
-**/Cargo.lock
 
 **/node_modules/
 
@@ -144,3 +140,5 @@ Ground-Truth-Evaluation/weights_v2/onnx/
 
 #**/*.onnx
 **/local.properties
+**/app/release
+**/google-services.json
