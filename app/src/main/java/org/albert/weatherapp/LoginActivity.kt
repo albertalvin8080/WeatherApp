@@ -54,8 +54,8 @@ class LoginActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun LoginPage(modifier: Modifier = Modifier) {
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("albertalvin@gmail.com") }
+    var password by rememberSaveable { mutableStateOf("123456") }
 //    val activity = LocalContext.current as? Activity
     val activity = LocalActivity.current
     Column(
@@ -90,12 +90,20 @@ fun LoginPage(modifier: Modifier = Modifier) {
         ) {
             Button(
                 onClick = {
-                    Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
-                    activity?.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
+                    Firebase.auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(activity!!) { task ->
+                            if (task.isSuccessful) {
+                                // removed on 5th practice
+//                            activity.startActivity(
+//                                Intent(activity, MainActivity::class.java).setFlags(
+//                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+//                                )
+//                            )
+                                Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(activity, "Login FALHOU!", Toast.LENGTH_LONG).show()
+                            }
+                        }
                 },
                 enabled = email.isNotEmpty() && password.isNotEmpty()
             ) {
@@ -111,21 +119,11 @@ fun LoginPage(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.size(24.dp))
         Button(
             onClick = {
-                Firebase.auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(activity!!) { task ->
-                        if (task.isSuccessful) {
-                            // removed on 5th practice
-//                            activity.startActivity(
-//                                Intent(activity, MainActivity::class.java).setFlags(
-//                                    Intent.FLAG_ACTIVITY_SINGLE_TOP
-//                                )
-//                            )
-                            Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
-                        } else {
-                            Toast.makeText(activity, "Login FALHOU!", Toast.LENGTH_LONG).show()
-                        }
-                    }
-
+                activity?.startActivity(
+                    Intent(activity, RegisterActivity::class.java).setFlags(
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    )
+                )
             }
         ) {
             Text("Register")

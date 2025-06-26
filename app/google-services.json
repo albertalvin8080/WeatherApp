@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "175269326836",
+    "project_id": "weatherapp-463018",
+    "storage_bucket": "weatherapp-463018.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175269326836:android:eb8e28ef8b4ca320fd13a1",
+        "android_client_info": {
+          "package_name": "org.albert.weatherapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlIM_JpAKKm1OHjVcXVrsWxLCFlSPVA6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -141,4 +141,3 @@ Ground-Truth-Evaluation/weights_v2/onnx/
 #**/*.onnx
 **/local.properties
 **/app/release
-**/google-services.json
