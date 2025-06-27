@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import org.albert.weatherapp.db.fb.FBDatabase
+import org.albert.weatherapp.db.fb.toFBUser
+import org.albert.weatherapp.model.User
 import org.albert.weatherapp.ui.theme.WeatherAppTheme
 
 class RegisterActivity : ComponentActivity() {
@@ -108,6 +111,7 @@ fun RegisterActivity(modifier: Modifier = Modifier) {
                     Firebase.auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(activity!!) { task ->
                             if (task.isSuccessful) {
+                                FBDatabase().register(User(name, email).toFBUser())
                                 Toast.makeText(activity,
                                     "Registro OK!", Toast.LENGTH_LONG).show()
                             } else {

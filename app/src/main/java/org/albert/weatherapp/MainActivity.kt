@@ -26,11 +26,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import org.albert.weatherapp.db.fb.FBDatabase
 import org.albert.weatherapp.ui.dialog.CityDialog
 import org.albert.weatherapp.ui.nav.BottomNavBar
 import org.albert.weatherapp.ui.nav.BottomNavItem
@@ -38,6 +40,7 @@ import org.albert.weatherapp.ui.nav.MainNavHost
 import org.albert.weatherapp.ui.nav.Route
 import org.albert.weatherapp.ui.theme.WeatherAppTheme
 import org.albert.weatherapp.viewmodel.MainViewModel
+import org.albert.weatherapp.viewmodel.MainViewModelFactory
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("RestrictedApi")
@@ -47,8 +50,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var showDialog by remember { mutableStateOf(false) }
+            val fbDB = remember { FBDatabase() }
+            val viewModel : MainViewModel = viewModel (
+                factory = MainViewModelFactory(fbDB)
+            )
             // state hoisting
-            val viewModel: MainViewModel by viewModels()
             val navController = rememberNavController()
             val currentRoute = navController.currentBackStackEntryAsState()
             val showButton = currentRoute.value?.destination?.hasRoute(Route.List::class) == true
@@ -65,7 +71,10 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { Text("Bem-vindo/a!") },
+                            title = {
+                                val name = viewModel.user?.name ?: "[não logado]"
+                                Text("Bem-vindo/a! $name")
+                            },
                             actions = {
                                 IconButton(onClick = {
                                     Firebase.auth.signOut()
