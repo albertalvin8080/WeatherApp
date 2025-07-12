@@ -32,6 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import org.albert.weatherapp.api.WeatherService
 import org.albert.weatherapp.db.fb.FBDatabase
 import org.albert.weatherapp.ui.dialog.CityDialog
 import org.albert.weatherapp.ui.nav.BottomNavBar
@@ -51,8 +52,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             var showDialog by remember { mutableStateOf(false) }
             val fbDB = remember { FBDatabase() }
-            val viewModel : MainViewModel = viewModel (
-                factory = MainViewModelFactory(fbDB)
+            val weatherService = remember { WeatherService() }
+            val viewModel : MainViewModel = viewModel(
+                factory = MainViewModelFactory(fbDB, weatherService)
             )
             // state hoisting
             val navController = rememberNavController()

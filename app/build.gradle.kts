@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,7 +8,6 @@ plugins {
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     alias(libs.plugins.google.gms.google.services)
 }
-
 android {
     namespace = "org.albert.weatherapp"
     compileSdk = 35
@@ -19,6 +20,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val keyFile = project.rootProject.file("local.properties")
+        val props = Properties()
+        props.load(keyFile.inputStream())
+        buildConfigField ("String", "WEATHER_API_KEY", props.getProperty("WEATHER_API_KEY"))
+//        buildConfigField(
+//            "String",
+//            "WEATHER_API_KEY",
+//            "\"${props.getProperty("WEATHER_API_KEY")}\""
+//        )
     }
 
     buildTypes {
@@ -39,10 +50,14 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
     // Google maps
     implementation("com.google.android.gms:play-services-maps:19.2.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
