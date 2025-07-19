@@ -20,35 +20,25 @@ import org.albert.weatherapp.viewmodel.MainViewModel
 @Composable
 fun MainNavHost(navController: NavHostController, mainViewModel: MainViewModel) {
     NavHost(navController, startDestination = Route.Home) {
-        composable<Route.Home> { HomePage() }
+        composable<Route.Home> { HomePage(mainViewModel) }
         composable<Route.List> { ListPage(mainViewModel) }
         composable<Route.Map> { MapPage(mainViewModel) }
     }
 }
 
 @Composable
-fun BottomNavBar(navController: NavHostController, items: List<BottomNavItem>) {
+fun BottomNavBar(viewModel: MainViewModel, items: List<BottomNavItem>) {
     NavigationBar (
         contentColor = Color.Black
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination
         items.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
                 label = { Text(text = item.title, fontSize = 12.sp) },
                 alwaysShowLabel = true,
-                selected = currentRoute == item.route,
+                selected = viewModel.page == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {
-                                saveState = true
-                            }
-                            restoreState = true
-                        }
-                        launchSingleTop = true
-                    }
+                    viewModel.page = item.route
                 }
             )
         }

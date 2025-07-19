@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -97,7 +98,7 @@ class MainActivity : ComponentActivity() {
                             BottomNavItem.ListButton,
                             BottomNavItem.MapButton,
                         )
-                        BottomNavBar(navController = navController, items)
+                        BottomNavBar(viewModel, items)
                     },
                     floatingActionButton = {
                         if (showButton) {
@@ -110,6 +111,17 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(innerPadding)) {
                         launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                         MainNavHost(navController = navController, viewModel)
+                    }
+                    LaunchedEffect (viewModel.page) {
+                        navController.navigate(viewModel.page) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {
+                                    saveState = true
+                                }
+                                restoreState = true
+                            }
+                            launchSingleTop = true
+                        }
                     }
                 }
             }
