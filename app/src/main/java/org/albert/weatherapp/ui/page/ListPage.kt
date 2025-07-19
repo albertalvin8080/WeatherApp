@@ -20,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,12 +34,17 @@ import org.albert.weatherapp.viewmodel.MainViewModel
 fun ListPage(viewModel: MainViewModel, modifier: Modifier = Modifier) {
     val cityList = viewModel.cities
     val activity = LocalContext.current as? Activity
-    LazyColumn (
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(8.dp)
     ) {
         items(cityList, key = { it.name }) { city ->
+            LaunchedEffect(city.name) {
+                if (city.weather == null) {
+                    viewModel.loadWeather(city.name)
+                }
+            }
             CityItem(city = city, onClose = {
                 viewModel.remove(city)
                 Toast.makeText(activity, "remove city ${city.name}", Toast.LENGTH_SHORT).show()
@@ -56,8 +62,11 @@ fun CityItem(
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row (
-        modifier = modifier.fillMaxWidth().padding(8.dp).clickable { onClick() },
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -66,14 +75,18 @@ fun CityItem(
         )
         Spacer(modifier = Modifier.size(12.dp))
         Column(modifier = modifier.weight(1f)) {
-            Text(modifier = Modifier,
+            Text(
+                modifier = Modifier,
                 text = city.name,
-                fontSize = 24.sp)
-            Text(modifier = Modifier,
-                text = city.weather?:"Carregando clima...",
-                fontSize = 16.sp)
+                fontSize = 24.sp
+            )
+            Text(
+                modifier = Modifier,
+                text = city.weather?.desc ?: "carregando...",
+                fontSize = 16.sp
+            )
         }
-        IconButton (onClick = onClose) {
+        IconButton(onClick = onClose) {
             Icon(Icons.Filled.Close, contentDescription = "Close")
         }
     }
