@@ -15,13 +15,18 @@ import org.albert.weatherapp.db.fb.FBUser
 import org.albert.weatherapp.db.fb.toFBCity
 import org.albert.weatherapp.model.City
 import org.albert.weatherapp.model.User
+import org.albert.weatherapp.monitor.ForecastMonitor
 import org.albert.weatherapp.ui.nav.Route
 
-class MainViewModelFactory(private val db: FBDatabase, private val service: WeatherService) :
+class MainViewModelFactory(
+    private val db: FBDatabase,
+    private val service: WeatherService,
+    private val monitor: ForecastMonitor,
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(db, service) as T
+            return MainViewModel(db, service, monitor) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
@@ -29,7 +34,8 @@ class MainViewModelFactory(private val db: FBDatabase, private val service: Weat
 
 class MainViewModel(
     private val db: FBDatabase,
-    private val service: WeatherService
+    private val service: WeatherService,
+    private val monitor: ForecastMonitor,
 ) : ViewModel(),
     FBDatabase.Listener {
 
@@ -80,11 +86,12 @@ class MainViewModel(
     }
 
     override fun onUserSignOut() {
-        TODO("Not yet implemented")
+        monitor.cancelAll()
     }
 
     override fun onCityAdded(city: FBCity) {
         _cities[city.name!!] = city.toCity()
+        monitor.updateCity(city.toCity())
     }
 
     override fun onCityUpdated(city: FBCity) {
@@ -97,11 +104,13 @@ class MainViewModel(
         if (_city.value?.name == city.name) {
             _city.value = _cities[city.name]
         }
+        monitor.updateCity(city.toCity())
     }
 
     override fun onCityRemoved(city: FBCity) {
         _cities.remove(city.name)
         if (_city.value?.name == city.name) { _city.value = null }
+        monitor.cancelCity(city.toCity())
     }
 
     fun loadWeather(name: String) {

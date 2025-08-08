@@ -55,6 +55,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     implementation("io.coil-kt:coil-compose:2.5.0") // coil
     implementation("com.squareup.picasso:picasso:2.8") // Picasso
 

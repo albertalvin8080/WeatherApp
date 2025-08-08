@@ -60,7 +60,7 @@ fun HomePage(viewModel: MainViewModel) {
                     Spacer(modifier = Modifier.size(12.dp))
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(

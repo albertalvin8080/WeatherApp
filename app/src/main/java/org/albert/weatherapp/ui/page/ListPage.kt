@@ -91,20 +91,13 @@ fun CityItem(
                     fontSize = 24.sp
                 )
                 Icon(
-                    imageVector = if (viewModel.city?.isMonitored == true)
+                    imageVector = if (city.isMonitored)
                         Icons.Filled.Notifications
                     else
                         Icons.Outlined.Notifications,
                     contentDescription = "Monitorada?",
                     modifier = Modifier
                         .size(32.dp)
-                        .clickable(enabled = viewModel.city != null) {
-                            viewModel.update(
-                                viewModel.city!!.copy(
-                                    isMonitored = !viewModel.city!!.isMonitored
-                                )
-                            )
-                        }
                 )
             }
             Text(
