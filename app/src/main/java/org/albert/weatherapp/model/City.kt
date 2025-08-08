@@ -7,4 +7,5 @@ data class City (
     val weather: Weather? = null,
     val location: LatLng? = null,
     var forecast: List<Forecast>? = null,
+    val isMonitored: Boolean = false,
 )

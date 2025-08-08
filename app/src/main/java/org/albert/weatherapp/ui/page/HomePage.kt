@@ -1,14 +1,21 @@
 package org.albert.weatherapp.ui.page
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,8 +35,11 @@ import org.albert.weatherapp.viewmodel.MainViewModel
 fun HomePage(viewModel: MainViewModel) {
     Column {
         if (viewModel.city == null) {
-            Column( modifier = Modifier.fillMaxSize()
-                .background(Color.Blue).wrapContentSize(Alignment.Center)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Blue)
+                    .wrapContentSize(Alignment.Center)
             ) {
                 Text(
                     text = "Selecione uma cidade!",
@@ -48,14 +58,42 @@ fun HomePage(viewModel: MainViewModel) {
                 )
                 Column {
                     Spacer(modifier = Modifier.size(12.dp))
-                    Text( text = viewModel.city?.name ?: "Selecione uma cidade...",
-                        fontSize = 28.sp )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = viewModel.city?.name ?: "Selecione uma cidade...",
+                            fontSize = 28.sp
+                        )
+                        Icon(
+                            imageVector = if (viewModel.city!!.isMonitored)
+                                Icons.Filled.Notifications
+                            else
+                                Icons.Outlined.Notifications,
+                            contentDescription = "Monitorada?",
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clickable(enabled = viewModel.city != null) {
+                                    viewModel.update(
+                                        viewModel.city!!.copy(
+                                            isMonitored = !viewModel.city!!.isMonitored
+                                        )
+                                    )
+                                }
+                        )
+                    }
                     Spacer(modifier = Modifier.size(12.dp))
-                    Text( text = viewModel.city?.weather?.desc ?: "...",
-                        fontSize = 22.sp )
+                    Text(
+                        text = viewModel.city?.weather?.desc ?: "...",
+                        fontSize = 22.sp
+                    )
                     Spacer(modifier = Modifier.size(12.dp))
-                    Text( text = "Temp: " + viewModel.city?.weather?.temp + "℃",
-                        fontSize = 22.sp )
+                    Text(
+                        text = "Temp: " + viewModel.city?.weather?.temp + "℃",
+                        fontSize = 22.sp
+                    )
                 }
             }
             LaunchedEffect(viewModel.city!!.name) {

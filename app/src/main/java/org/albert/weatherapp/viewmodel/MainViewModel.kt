@@ -88,9 +88,15 @@ class MainViewModel(
     }
 
     override fun onCityUpdated(city: FBCity) {
+        val oldCity = _cities[city.name]
         _cities.remove(city.name)
-        _cities[city.name!!] = city.toCity()
-        if (_city.value?.name == city.name) { _city.value = city.toCity() }
+        _cities[city.name!!] = city.toCity().copy(
+            weather = oldCity?.weather,
+            forecast = oldCity?.forecast
+        )
+        if (_city.value?.name == city.name) {
+            _city.value = _cities[city.name]
+        }
     }
 
     override fun onCityRemoved(city: FBCity) {
@@ -126,5 +132,9 @@ class MainViewModel(
             _cities.remove(name)
             _cities[name] = newCity
         }
+    }
+
+    fun update(city: City) {
+        db.update(city = city.toFBCity())
     }
 }

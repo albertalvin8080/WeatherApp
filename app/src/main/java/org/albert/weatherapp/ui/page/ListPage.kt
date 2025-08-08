@@ -15,6 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -27,10 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import org.albert.weatherapp.R
 import org.albert.weatherapp.model.City
 import org.albert.weatherapp.ui.nav.Route
 import org.albert.weatherapp.viewmodel.MainViewModel
-import org.albert.weatherapp.R
 
 @SuppressLint("ContextCastToActivity")
 @Composable
@@ -48,7 +50,7 @@ fun ListPage(viewModel: MainViewModel, modifier: Modifier = Modifier) {
                     viewModel.loadWeather(city.name)
                 }
             }
-            CityItem(city = city, onClose = {
+            CityItem(viewModel, city = city, onClose = {
                 viewModel.remove(city)
                 Toast.makeText(activity, "remove city ${city.name}", Toast.LENGTH_SHORT).show()
             }, onClick = {
@@ -61,6 +63,7 @@ fun ListPage(viewModel: MainViewModel, modifier: Modifier = Modifier) {
 
 @Composable
 fun CityItem(
+    viewModel: MainViewModel,
     city: City,
     onClick: () -> Unit,
     onClose: () -> Unit,
@@ -81,11 +84,29 @@ fun CityItem(
         )
         Spacer(modifier = Modifier.size(12.dp))
         Column(modifier = modifier.weight(1f)) {
-            Text(
-                modifier = Modifier,
-                text = city.name,
-                fontSize = 24.sp
-            )
+            Row {
+                Text(
+                    modifier = Modifier,
+                    text = city.name,
+                    fontSize = 24.sp
+                )
+                Icon(
+                    imageVector = if (viewModel.city?.isMonitored == true)
+                        Icons.Filled.Notifications
+                    else
+                        Icons.Outlined.Notifications,
+                    contentDescription = "Monitorada?",
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(enabled = viewModel.city != null) {
+                            viewModel.update(
+                                viewModel.city!!.copy(
+                                    isMonitored = !viewModel.city!!.isMonitored
+                                )
+                            )
+                        }
+                )
+            }
             Text(
                 modifier = Modifier,
                 text = city.weather?.desc ?: "carregando...",
