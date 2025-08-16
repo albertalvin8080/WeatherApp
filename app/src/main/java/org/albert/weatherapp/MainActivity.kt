@@ -9,7 +9,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -38,7 +37,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.albert.weatherapp.api.WeatherService
 import org.albert.weatherapp.db.fb.FBDatabase
+import org.albert.weatherapp.db.local.LocalDatabase
 import org.albert.weatherapp.monitor.ForecastMonitor
+import org.albert.weatherapp.repo.Repository
 import org.albert.weatherapp.ui.dialog.CityDialog
 import org.albert.weatherapp.ui.nav.BottomNavBar
 import org.albert.weatherapp.ui.nav.BottomNavItem
@@ -57,12 +58,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             var showDialog by remember { mutableStateOf(false) }
             val fbDB = remember { FBDatabase() }
+            val uid = Firebase.auth.currentUser?.uid ?: "weather_db"
+            val localDB = remember { LocalDatabase(this, uid) }
+            val repository = remember { Repository(fbDB, localDB) }
             val weatherService = remember { WeatherService() }
             val monitor = remember { ForecastMonitor(this.applicationContext) }
-            val viewModel : MainViewModel = viewModel(
-                factory = MainViewModelFactory(fbDB, weatherService, monitor)
+            val viewModel: MainViewModel = viewModel(
+                factory = MainViewModelFactory(repository, weatherService, monitor)
             )
-            DisposableEffect (Unit) {
+            DisposableEffect(Unit) {
                 val listener = Consumer<Intent> { intent ->
                     val name = intent.getStringExtra("city")
                     val city = viewModel.cities.find { it.name == name }
@@ -127,7 +131,7 @@ class MainActivity : ComponentActivity() {
                         launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                         MainNavHost(navController = navController, viewModel)
                     }
-                    LaunchedEffect (viewModel.page) {
+                    LaunchedEffect(viewModel.page) {
                         navController.navigate(viewModel.page) {
                             navController.graph.startDestinationRoute?.let {
                                 popUpTo(it) {
