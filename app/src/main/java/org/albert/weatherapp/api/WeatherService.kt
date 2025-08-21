@@ -92,19 +92,19 @@ class WeatherService {
         Picasso.get().load(imgUrl).get() // retorno
     }
 
-    fun getBitmap(imgUrl: String, onResponse: (Bitmap?) -> Unit) {
-        Picasso.get().load(imgUrl).into(object : com.squareup.picasso.Target {
-            override fun onBitmapLoaded(
-                bitmap: Bitmap?, from: Picasso.LoadedFrom?
-            ) {
-                onResponse.invoke(bitmap)
-            }
-
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                Log.w("WeatherApp WARNING", "" + e?.message)
-                e?.printStackTrace()
-            }
-        })
-    }
+//    fun getBitmap(imgUrl: String, onResponse: (Bitmap?) -> Unit) {
+//        Picasso.get().load(imgUrl).into(object : com.squareup.picasso.Target {
+//            override fun onBitmapLoaded(
+//                bitmap: Bitmap?, from: Picasso.LoadedFrom?
+//            ) {
+//                onResponse.invoke(bitmap)
+//            }
+//
+//            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+//            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+//                Log.w("WeatherApp WARNING", "" + e?.message)
+//                e?.printStackTrace()
+//            }
+//        })
+//    }
 }

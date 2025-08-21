@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -41,6 +42,17 @@ fun ForecastItem(
         )
         Spacer(modifier = Modifier.size(16.dp))
         Column {
+//            Text(modifier = Modifier, text = forecast.weather, fontSize = 24.sp)
+//            Spacer(modifier = Modifier.height(12.dp))
+//            Row {
+//                Column {
+//                    Text(modifier = Modifier, text = "Min: $tempMin℃", fontSize = 16.sp)
+//                    Spacer(modifier = Modifier.size(2.dp))
+//                    Text(modifier = Modifier, text = "Max: $tempMax℃", fontSize = 16.sp)
+//                }
+//                Text(modifier = Modifier, text = forecast.date, fontSize = 20.sp)
+//                Spacer(modifier = Modifier.size(12.dp))
+//            }
             Text(modifier = Modifier, text = forecast.weather, fontSize = 24.sp)
             Row {
                 Text(modifier = Modifier, text = forecast.date, fontSize = 20.sp)

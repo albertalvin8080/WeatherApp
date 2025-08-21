@@ -105,19 +105,20 @@ class MainViewModel(
         _cities.remove(name)
         _cities[name] = newCity
         city = if (city?.name == name) newCity else city
+        refresh(newCity)
     }
 
     fun loadBitmap(name: String) = viewModelScope.launch(Dispatchers.IO) {
         val city = _cities[name]
-        service.getBitmap(city?.weather!!.imgUrl) { bitmap ->
-            val newCity = city.copy(
-                weather = city.weather?.copy(
-                    bitmap = bitmap
-                )
+        val bitmap = service.getBitmap(city?.weather!!.imgUrl)
+        val newCity = city.copy(
+            weather = city.weather?.copy(
+                bitmap = bitmap
             )
-            _cities.remove(name)
-            _cities[name] = newCity
-        }
+        )
+        _cities.remove(name)
+        _cities[name] = newCity
+        refresh(newCity)
     }
 
     fun update(city: City) {
